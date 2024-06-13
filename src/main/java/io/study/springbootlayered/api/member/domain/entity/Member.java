@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.study.springbootlayered.web.base.entity.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -41,17 +42,25 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private MemberStatusType memberStatus;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MemberAuthority> authorities = new HashSet<>();
 
-    public static Member createMember(String email ,String nickname, String password) {
-        return new Member(email, nickname, password);
-    }
-
-    private Member(String email ,String nickname, String password) {
+    private Member(final String email ,final String nickname, final String password) {
         this.password = new MemberPassword(password);
         this.memberStatus = MemberStatusType.ACTIVE;
         this.email = email;
         this.nickname = nickname;
     }
+
+    public static Member createBasicMember(final String email ,final String nickname, final String password) {
+        Member member = new Member(email, nickname, password);
+        member.addAuthority(MemberAuthority.setRoleUser(member));
+        return member;
+    }
+
+    private void addAuthority(MemberAuthority memberAuthority) {
+        authorities.add(memberAuthority);
+        memberAuthority.addMember(this);
+    }
+
 }

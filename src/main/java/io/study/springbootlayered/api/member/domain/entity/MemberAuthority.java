@@ -38,8 +38,8 @@ public class MemberAuthority extends BaseEntity {
         return new MemberAuthority(member, AuthorityType.ROLE_USER);
     }
 
-    public static MemberAuthority setRoleAdmin(Member member) {
-        return new MemberAuthority(member, AuthorityType.ROLE_ADMIN);
+    public void addMember(Member member) {
+        this.member = member;
     }
 
 }
