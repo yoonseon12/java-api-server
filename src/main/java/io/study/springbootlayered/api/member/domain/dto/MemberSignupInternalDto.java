@@ -11,8 +11,8 @@ public class MemberSignupInternalDto {
     @Getter
     @RequiredArgsConstructor
     public static class Request {
-        private final String nickname;
         private final String email;
+        private final String nickname;
         private final String password;
     }
 
