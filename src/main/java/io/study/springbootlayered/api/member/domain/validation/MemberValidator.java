@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 
 import io.study.springbootlayered.api.member.domain.dto.MemberSignupInternalDto;
 import io.study.springbootlayered.api.member.domain.repository.MemberRepository;
+import io.study.springbootlayered.web.exception.ApiException;
+import io.study.springbootlayered.web.exception.error.MemberErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -19,13 +21,13 @@ public class MemberValidator {
 
     private void nicknameDuplicateValidation(final String nickname) {
         if (memberRepository.existsByNickname(nickname)) {
-            throw new IllegalArgumentException("중복된 닉네임이 존재합니다.");
+            throw new ApiException(MemberErrorCode.CONFLICT_DUPLICATE_NICKNAME);
         }
     }
 
     private void emailDuplicateValidation(final String email) {
         if (memberRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("중복된 이메일이 존재합니다.");
+            throw new ApiException(MemberErrorCode.CONFLICT_DUPLICATE_EMAIL);
         }
     }
 }
