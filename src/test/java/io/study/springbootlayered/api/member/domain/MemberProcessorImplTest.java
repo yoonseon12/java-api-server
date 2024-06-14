@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import io.study.springbootlayered.api.member.domain.dto.MemberSignupInternalDto;
 import io.study.springbootlayered.api.member.domain.entity.Member;
@@ -22,6 +23,9 @@ class MemberProcessorImplTest {
 
     @Mock
     private MemberRepository memberRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @Test
     @DisplayName("회원가입 성공 테스트")
