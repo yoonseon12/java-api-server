@@ -8,14 +8,11 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MemberSignupExternalDto {
+public class MemberSigninExternalDto {
 
     @Getter
     @RequiredArgsConstructor
     public static class Request {
-        @NotBlank
-        private final String nickname;
-
         @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "이메일 형식이 잘못되었습니다.")
         @NotBlank
         private final String email;
@@ -28,7 +25,7 @@ public class MemberSignupExternalDto {
     @Getter
     @RequiredArgsConstructor
     public static class Response {
-        private final String email;
+        private final String accessToken;
+        private final String refreshToken;
     }
-
 }

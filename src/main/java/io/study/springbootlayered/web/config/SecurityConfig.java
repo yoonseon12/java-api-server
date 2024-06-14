@@ -15,12 +15,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import io.study.springbootlayered.web.jwt.JwtAccessDeniedHandler;
+import io.study.springbootlayered.web.jwt.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -47,6 +52,9 @@ public class SecurityConfig {
         http.headers(header ->
             header
                 .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+
+        http.exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .accessDeniedHandler(jwtAccessDeniedHandler));
 
         return http.build();
     }
