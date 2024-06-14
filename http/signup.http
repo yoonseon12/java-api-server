@@ -3,7 +3,7 @@ x-api-version: v1
 Content-Type: application/json
 
 {
-  "nickname": "Kevin",
-  "email": "kkk@gmail.com",
-  "password": "1234"
+  "nickname": "Kevin2",
+  "email": "yoonseon3@gmail.com",
+  "password": "aa1234555@"
 }

@@ -1,6 +1,7 @@
 package io.study.springbootlayered.api.member.ui;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,10 +12,12 @@ import io.study.springbootlayered.api.member.ui.dto.MemberSignupExternalDto;
 import io.study.springbootlayered.api.member.ui.mapstruct.MemberDtoMapstructManager;
 import io.study.springbootlayered.web.base.BaseResource;
 import io.study.springbootlayered.web.base.response.CommonResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class MemberController extends BaseResource {
 
     private final MemberDtoMapstructManager memberDtoMapstructManager;
@@ -27,8 +30,7 @@ public class MemberController extends BaseResource {
      */
     @PostMapping(value = "/members", headers = X_API_VERSION)
     public ResponseEntity<CommonResponse<MemberSignupExternalDto.Response>> signup(
-        @RequestBody final MemberSignupExternalDto.Request externalRequest)
-    {
+        @RequestBody @Valid final MemberSignupExternalDto.Request externalRequest) {
         MemberSignupInternalDto.Request internalRequest = memberDtoMapstructManager.of(externalRequest);
         MemberSignupInternalDto.Response internalResponse = memberSignupService.signup(internalRequest);
         MemberSignupExternalDto.Response externalresponse = memberDtoMapstructManager.of(internalResponse);
