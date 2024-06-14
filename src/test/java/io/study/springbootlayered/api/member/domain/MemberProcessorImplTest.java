@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import io.study.springbootlayered.api.member.domain.dto.MemberSignupInternalDto;
 import io.study.springbootlayered.api.member.domain.entity.Member;
 import io.study.springbootlayered.api.member.domain.repository.MemberRepository;
+import io.study.springbootlayered.api.member.domain.validation.MemberValidator;
 
 @ExtendWith(MockitoExtension.class)
 class MemberProcessorImplTest {
@@ -26,6 +27,9 @@ class MemberProcessorImplTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private MemberValidator memberValidator;
 
     @Test
     @DisplayName("회원가입 성공 테스트")
@@ -41,6 +45,7 @@ class MemberProcessorImplTest {
         //then
         assertThat(response).isNotNull();
         then(memberRepository).should(times(1)).save(any(Member.class));
+        then(memberValidator).should(times(1)).validate(request);
 
     }
 
