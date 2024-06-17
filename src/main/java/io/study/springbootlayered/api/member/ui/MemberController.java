@@ -57,9 +57,9 @@ public class MemberController extends BaseResource {
 
 
     /*
-    1. DTO 이름 양식 정해야하고
+    1. DTO 이름 양식 정해야하고 - ok
     2. 로그인 후 토큰까서 정보 잘 들어가있는지 확인하고 - ok
-    3. @Value 어노테이션 제거
+    3. @Value 어노테이션 제거 - ok
     4. 이메일이랑 비밀번호 어노테이션 만들어서 달기
     5. 회원정보 조회 API 구현(로그인 테스트 용)
      */

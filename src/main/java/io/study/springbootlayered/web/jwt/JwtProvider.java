@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,16 +23,17 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.study.springbootlayered.web.config.properties.JwtProperties;
 
 @Component
 public class JwtProvider {
+    private final JwtProperties jwtProperties;
     private static final String AUTHORITIES_KEY = "auth";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60 * 30;            // 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 7;  // 7일
     private final Key key;
 
-    public JwtProvider(@Value("${jwt.secret}") final String secretKey) {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+    public JwtProvider(JwtProperties jwtProperties) {
+        this.jwtProperties = jwtProperties;
+        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -53,7 +53,7 @@ public class JwtProvider {
         return Jwts.builder()
             .setSubject(sub)
             .claim(AUTHORITIES_KEY, authorities)
-            .setExpiration(getExpirationTime(ACCESS_TOKEN_EXPIRE_TIME))
+            .setExpiration(getExpirationTime(jwtProperties.getAccessTokenExpireTime()))
             .signWith(key, SignatureAlgorithm.HS512)
             .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
             .compact();
@@ -63,7 +63,7 @@ public class JwtProvider {
     public String createRefreshToken(final String sub) {
         return Jwts.builder()
             .setSubject(sub)
-            .setExpiration(getExpirationTime(REFRESH_TOKEN_EXPIRE_TIME))
+            .setExpiration(getExpirationTime(jwtProperties.getRefreshTokenExpireTime()))
             .signWith(key, SignatureAlgorithm.HS512)
             .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
             .compact();
@@ -73,6 +73,7 @@ public class JwtProvider {
         LocalDateTime localDateTime = LocalDateTime.now()
             .plusSeconds(tokenExpireTime);
         Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+
         return Date.from(instant);
     }
 
