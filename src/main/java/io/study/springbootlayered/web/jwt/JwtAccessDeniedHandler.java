@@ -2,9 +2,12 @@ package io.study.springbootlayered.web.jwt;
 
 import java.io.IOException;
 
+import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.study.springbootlayered.web.base.response.ErrorResponse;
 import io.study.springbootlayered.web.exception.error.LoginErrorCode;
@@ -17,11 +20,23 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @Component
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
         AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(LoginErrorCode.FORBIDDEN.getHttpStatus().value());
-        response.getWriter().println(ErrorResponse.of(LoginErrorCode.FORBIDDEN));
+        responseBuilder(response, LoginErrorCode.FORBIDDEN);
+    }
+
+    private void responseBuilder(HttpServletResponse response, LoginErrorCode loginErrorCode) throws IOException {
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.getWriter().print(
+            objectMapper.writeValueAsString(
+                ErrorResponse.of(loginErrorCode)
+            )
+        );
     }
 }

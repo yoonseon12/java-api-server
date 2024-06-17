@@ -6,7 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -15,39 +15,38 @@ import io.jsonwebtoken.security.SecurityException;
 import io.study.springbootlayered.web.exception.error.LoginErrorCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtFilter extends GenericFilterBean {
+public class JwtFilter extends OncePerRequestFilter {
     private static final String ATTRIBUTE = "token_exception";
     private static final String TOKEN_PREFIX = "Bearer";
     private final JwtProvider jwtProvider;
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws
-        IOException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest)servletRequest;
-        String jwt = resolveToken(httpServletRequest);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
+
+        String jwt = resolveToken(request);
 
         try {
             jwtProvider.validateAccessToken(jwt);
         } catch (SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
-            servletRequest.setAttribute(ATTRIBUTE, LoginErrorCode.INVALID_JWT_SIGNATURE);
+            request.setAttribute(ATTRIBUTE, LoginErrorCode.INVALID_JWT_SIGNATURE);
         } catch (ExpiredJwtException e) {
-            servletRequest.setAttribute(ATTRIBUTE, LoginErrorCode.EXPIRED_JWT_TOKEN);
+            request.setAttribute(ATTRIBUTE, LoginErrorCode.EXPIRED_JWT_TOKEN);
             log.info("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
-            servletRequest.setAttribute(ATTRIBUTE, LoginErrorCode.UNSUPPORTED_JWT_TOKEN);
+            request.setAttribute(ATTRIBUTE, LoginErrorCode.UNSUPPORTED_JWT_TOKEN);
         } catch (IllegalArgumentException e) {
             log.error("JWT 토큰이 잘못되었습니다.");
-            servletRequest.setAttribute(ATTRIBUTE, LoginErrorCode.INVALID_JWT_TOKEN);
+            request.setAttribute(ATTRIBUTE, LoginErrorCode.INVALID_JWT_TOKEN);
         } catch (Exception e) {
             log.error("================================================");
             log.error("JwtFilter - doFilterInternal() 오류발생");
@@ -57,7 +56,7 @@ public class JwtFilter extends GenericFilterBean {
             e.printStackTrace();
             log.error("}");
             log.error("================================================");
-            servletRequest.setAttribute(ATTRIBUTE, LoginErrorCode.JWT_UNKNOWN_ERROR);
+            request.setAttribute(ATTRIBUTE, LoginErrorCode.JWT_UNKNOWN_ERROR);
         }
 
         if (StringUtils.hasText(jwt) && jwtProvider.validateAccessToken(jwt)) {
@@ -66,7 +65,7 @@ public class JwtFilter extends GenericFilterBean {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        filterChain.doFilter(servletRequest, servletResponse);
+        filterChain.doFilter(request, response);
     }
 
     private String resolveToken(final HttpServletRequest request) {
