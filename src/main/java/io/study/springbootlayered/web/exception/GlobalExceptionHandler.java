@@ -51,6 +51,6 @@ public class GlobalExceptionHandler {
         log.warn(e.getMessage(), e);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-            .body(ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR.value(), "서버에 문제가 발생했습니다."));
+            .body(ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
     }
 }
