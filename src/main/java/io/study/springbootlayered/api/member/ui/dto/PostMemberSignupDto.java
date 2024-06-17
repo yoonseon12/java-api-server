@@ -1,7 +1,8 @@
 package io.study.springbootlayered.api.member.ui.dto;
 
+import io.study.springbootlayered.web.annotation.ValidEmail;
+import io.study.springbootlayered.web.annotation.ValidPassword;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,12 +17,10 @@ public class PostMemberSignupDto {
         @NotBlank
         private final String nickname;
 
-        @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "이메일 형식이 잘못되었습니다.")
-        @NotBlank
+        @ValidEmail
         private final String email;
 
-        @Pattern(regexp = "^[a-zA-Z0-9!@#$%^&*()\\-_=+]{8,16}$", message = "비밀번호 형식이 잘못되었습니다.")
-        @NotBlank
+        @ValidPassword
         private final String password;
     }
 
