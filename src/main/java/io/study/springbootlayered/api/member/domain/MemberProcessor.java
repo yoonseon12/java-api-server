@@ -1,7 +1,7 @@
 package io.study.springbootlayered.api.member.domain;
 
-import io.study.springbootlayered.api.member.domain.dto.MemberSignupInternalDto;
+import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
 
 public interface MemberProcessor {
-    MemberSignupInternalDto.Response register(MemberSignupInternalDto.Request request);
+    MemberSignupDto.Info register(MemberSignupDto.Command request);
 }

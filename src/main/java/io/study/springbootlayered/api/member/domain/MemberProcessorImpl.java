@@ -3,7 +3,7 @@ package io.study.springbootlayered.api.member.domain;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import io.study.springbootlayered.api.member.domain.dto.MemberSignupInternalDto;
+import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
 import io.study.springbootlayered.api.member.domain.entity.Member;
 import io.study.springbootlayered.api.member.domain.repository.MemberRepository;
 import io.study.springbootlayered.api.member.domain.validation.MemberValidator;
@@ -18,13 +18,13 @@ public class MemberProcessorImpl implements MemberProcessor {
     private final MemberValidator memberValidator;
 
     @Override
-    public MemberSignupInternalDto.Response register(final MemberSignupInternalDto.Request request) {
+    public MemberSignupDto.Info register(final MemberSignupDto.Command request) {
         memberValidator.validate(request);
         Member initBasicMember = Member.createBasicMember(request.getEmail(), request.getNickname(),
             encodePassword(request.getPassword()));
         Member savedMember = memberRepository.save(initBasicMember);
 
-        return new MemberSignupInternalDto.Response(savedMember.getEmail());
+        return new MemberSignupDto.Info(savedMember.getEmail());
     }
 
     private String encodePassword(String password) {

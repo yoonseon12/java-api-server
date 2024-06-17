@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import io.study.springbootlayered.api.member.domain.dto.MemberSignupInternalDto;
+import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
 import io.study.springbootlayered.api.member.domain.repository.MemberRepository;
 import io.study.springbootlayered.web.exception.ApiException;
 import io.study.springbootlayered.web.exception.error.MemberErrorCode;
@@ -29,7 +29,7 @@ class MemberValidatorTest {
     @DisplayName("중복 이메일 검증 테스트")
     void emailDuplicateValidation() throws Exception {
         //given
-        var request = new MemberSignupInternalDto.Request("yoon3@gmail.com", "yy", "1234");
+        var request = new MemberSignupDto.Command("yoon3@gmail.com", "yy", "1234");
         given(memberRepository.existsByEmail(request.getEmail())).willReturn(true);
 
         //when & then
@@ -42,7 +42,7 @@ class MemberValidatorTest {
     @DisplayName("중복 닉네임 검증 테스트")
     void nicknameDuplicateValidation() throws Exception {
         //given
-        var request = new MemberSignupInternalDto.Request("yoon3@gmail.com", "yy", "1234");
+        var request = new MemberSignupDto.Command("yoon3@gmail.com", "yy", "1234");
         given(memberRepository.existsByNickname(request.getNickname())).willReturn(true);
 
         //when & then

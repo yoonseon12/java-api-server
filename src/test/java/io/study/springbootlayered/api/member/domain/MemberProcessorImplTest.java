@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import io.study.springbootlayered.api.member.domain.dto.MemberSignupInternalDto;
+import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
 import io.study.springbootlayered.api.member.domain.entity.Member;
 import io.study.springbootlayered.api.member.domain.repository.MemberRepository;
 import io.study.springbootlayered.api.member.domain.validation.MemberValidator;
@@ -35,7 +35,7 @@ class MemberProcessorImplTest {
     @DisplayName("회원가입 성공 테스트")
     void signupSuccess() throws Exception {
         //given
-        var request = new MemberSignupInternalDto.Request("kkk@gmail.com", "kkk", "1234");
+        var request = new MemberSignupDto.Command("kkk@gmail.com", "kkk", "1234");
         Member member = mockMember();
         given(memberRepository.save(any(Member.class))).willReturn(member);
 

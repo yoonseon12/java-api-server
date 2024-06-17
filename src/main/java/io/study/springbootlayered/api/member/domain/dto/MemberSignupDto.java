@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MemberSignupInternalDto {
+public class MemberSignupDto {
 
     @Getter
     @RequiredArgsConstructor
-    public static class Request {
+    public static class Command {
         private final String email;
         private final String nickname;
         private final String password;
@@ -18,7 +18,7 @@ public class MemberSignupInternalDto {
 
     @Getter
     @RequiredArgsConstructor
-    public static class Response {
+    public static class Info {
         private final String email;
     }
 }

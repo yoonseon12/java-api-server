@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MemberSigninExternalDto {
+public class PostMemberSigninDto {
 
     @Getter
     @RequiredArgsConstructor

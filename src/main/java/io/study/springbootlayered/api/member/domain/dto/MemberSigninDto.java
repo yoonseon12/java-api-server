@@ -6,18 +6,18 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MemberSigninInternalDto {
+public class MemberSigninDto {
 
     @Getter
     @RequiredArgsConstructor
-    public static class Request {
+    public static class Command {
         private final String email;
         private final String password;
     }
 
     @Getter
     @RequiredArgsConstructor
-    public static class Response {
+    public static class Info {
         private final String accessToken;
         private final String refreshToken;
     }

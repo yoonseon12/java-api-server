@@ -2,7 +2,7 @@ package io.study.springbootlayered.api.member.domain.validation;
 
 import org.springframework.stereotype.Component;
 
-import io.study.springbootlayered.api.member.domain.dto.MemberSignupInternalDto;
+import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
 import io.study.springbootlayered.api.member.domain.repository.MemberRepository;
 import io.study.springbootlayered.web.exception.ApiException;
 import io.study.springbootlayered.web.exception.error.MemberErrorCode;
@@ -14,7 +14,7 @@ public class MemberValidator {
 
     private final MemberRepository memberRepository;
 
-    public void validate(final MemberSignupInternalDto.Request request) {
+    public void validate(final MemberSignupDto.Command request) {
         nicknameDuplicateValidation(request.getNickname());
         emailDuplicateValidation(request.getEmail());
     }
