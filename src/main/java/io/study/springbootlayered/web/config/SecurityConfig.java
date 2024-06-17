@@ -17,6 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import io.study.springbootlayered.web.jwt.JwtAccessDeniedHandler;
 import io.study.springbootlayered.web.jwt.JwtAuthenticationEntryPoint;
+import io.study.springbootlayered.web.jwt.JwtProvider;
+import io.study.springbootlayered.web.jwt.JwtSecurityConfig;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -26,6 +28,12 @@ public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtProvider jwtProvider;
+
+    private static final String[] PERMIT_ALL_POSTS = {
+        "/api/members",
+        "/api/members/signin"
+    };
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -36,7 +44,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable)
-            .formLogin(FormLoginConfigurer::disable)
+            .formLogin(FormLoginConfigurer::permitAll)
             .httpBasic(HttpBasicConfigurer::disable);
 
         http.sessionManagement(sessionManagement ->
@@ -45,7 +53,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authorize ->
             authorize
-                .requestMatchers(HttpMethod.POST, "/api/members/**").permitAll()
+                .requestMatchers(HttpMethod.POST, PERMIT_ALL_POSTS).permitAll()
                 .requestMatchers(PathRequest.toH2Console()).permitAll()
                 .anyRequest().authenticated());
 
@@ -55,6 +63,8 @@ public class SecurityConfig {
 
         http.exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .accessDeniedHandler(jwtAccessDeniedHandler));
+
+        http.apply(new JwtSecurityConfig(jwtProvider));
 
         return http.build();
     }

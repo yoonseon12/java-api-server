@@ -1,6 +1,6 @@
 package io.study.springbootlayered.web.jwt;
 
-import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.SecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -8,14 +8,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+public class JwtSecurityConfig implements SecurityConfigurer<DefaultSecurityFilterChain, HttpSecurity> {
 
     private final JwtProvider jwtProvider;
 
     @Override
-    public void configure(HttpSecurity http) {
-        http.addFilterBefore(
-            new JwtFilter(jwtProvider),
+    public void init(HttpSecurity builder) throws Exception {
+    }
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http.addFilterBefore(new JwtFilter(jwtProvider),
             UsernamePasswordAuthenticationFilter.class);
     }
+
 }
