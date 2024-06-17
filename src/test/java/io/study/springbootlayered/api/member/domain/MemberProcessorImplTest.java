@@ -45,7 +45,7 @@ class MemberProcessorImplTest {
         //then
         assertThat(response).isNotNull();
         then(memberRepository).should(times(1)).save(any(Member.class));
-        then(memberValidator).should(times(1)).validate(request);
+        then(memberValidator).should(times(1)).signinValidate(request);
 
     }
 

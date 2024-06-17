@@ -3,10 +3,13 @@ package io.study.springbootlayered.api.member.domain;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import io.study.springbootlayered.api.member.domain.dto.MemberDetailDto;
 import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
 import io.study.springbootlayered.api.member.domain.entity.Member;
 import io.study.springbootlayered.api.member.domain.repository.MemberRepository;
 import io.study.springbootlayered.api.member.domain.validation.MemberValidator;
+import io.study.springbootlayered.web.exception.ApiException;
+import io.study.springbootlayered.web.exception.error.MemberErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -19,7 +22,7 @@ public class MemberProcessorImpl implements MemberProcessor {
 
     @Override
     public MemberSignupDto.Info register(final MemberSignupDto.Command request) {
-        memberValidator.validate(request);
+        memberValidator.signinValidate(request);
         Member initBasicMember = Member.createBasicMember(request.getEmail(), request.getNickname(),
             encodePassword(request.getPassword()));
         Member savedMember = memberRepository.save(initBasicMember);
@@ -27,7 +30,20 @@ public class MemberProcessorImpl implements MemberProcessor {
         return new MemberSignupDto.Info(savedMember.getEmail());
     }
 
-    private String encodePassword(String password) {
+    @Override
+    public MemberDetailDto.Info getMember(final Long memberId, final String loginEmail) {
+        memberValidator.isSelf(memberId, loginEmail);
+        Member findMember = findById(memberId);
+
+        return MemberDetailDto.Info.of(findMember);
+    }
+
+    private Member findById(final Long memberId) {
+        return memberRepository.findById(memberId)
+            .orElseThrow(() -> new ApiException(MemberErrorCode.NOT_FOUND_MEMBER));
+    }
+
+    private String encodePassword(final String password) {
         return passwordEncoder.encode(password);
     }
 

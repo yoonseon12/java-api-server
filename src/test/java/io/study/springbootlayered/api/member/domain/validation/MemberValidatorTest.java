@@ -34,7 +34,7 @@ class MemberValidatorTest {
 
         //when & then
         ApiException exception = assertThrows(ApiException.class,
-            () -> memberValidator.validate(request));
+            () -> memberValidator.signinValidate(request));
         assertThat(exception.getErrorCode()).isEqualTo(MemberErrorCode.CONFLICT_DUPLICATE_EMAIL);
     }
 
@@ -47,7 +47,7 @@ class MemberValidatorTest {
 
         //when & then
         ApiException exception = assertThrows(ApiException.class,
-            () -> memberValidator.validate(request));
+            () -> memberValidator.signinValidate(request));
         assertThat(exception.getErrorCode()).isEqualTo(MemberErrorCode.CONFLICT_DUPLICATE_NICKNAME);
     }
 
