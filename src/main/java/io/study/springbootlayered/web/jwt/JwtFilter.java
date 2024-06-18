@@ -32,9 +32,20 @@ public class JwtFilter extends OncePerRequestFilter {
         FilterChain filterChain) throws ServletException, IOException {
 
         String jwt = resolveToken(request);
+        validateToken(request, jwt);
 
+        if (StringUtils.hasText(jwt) && jwtProvider.validateAccessToken(jwt)) {
+            Authentication authentication = jwtProvider.getAuthentication(jwt);
+            log.info("인증정보 저장 {}", authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+
+        filterChain.doFilter(request, response);
+    }
+
+    private void validateToken(final HttpServletRequest request, final String token) {
         try {
-            jwtProvider.validateAccessToken(jwt);
+            jwtProvider.validateAccessToken(token);
         } catch (SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
             request.setAttribute(ATTRIBUTE, LoginErrorCode.INVALID_JWT_SIGNATURE);
@@ -50,7 +61,7 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             log.error("================================================");
             log.error("JwtFilter - doFilterInternal() 오류발생");
-            log.error("token : {}", jwt);
+            log.error("token : {}", token);
             log.error("Exception Message : {}", e.getMessage());
             log.error("Exception StackTrace : {");
             e.printStackTrace();
@@ -58,14 +69,6 @@ public class JwtFilter extends OncePerRequestFilter {
             log.error("================================================");
             request.setAttribute(ATTRIBUTE, LoginErrorCode.JWT_UNKNOWN_ERROR);
         }
-
-        if (StringUtils.hasText(jwt) && jwtProvider.validateAccessToken(jwt)) {
-            Authentication authentication = jwtProvider.getAuthentication(jwt);
-            log.info("인증정보 저장 {}", authentication);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-
-        filterChain.doFilter(request, response);
     }
 
     private String resolveToken(final HttpServletRequest request) {
@@ -76,7 +79,7 @@ public class JwtFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private boolean isExistBearer(String bearerToken) {
+    private boolean isExistBearer(final String bearerToken) {
         return StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX);
     }
 }
