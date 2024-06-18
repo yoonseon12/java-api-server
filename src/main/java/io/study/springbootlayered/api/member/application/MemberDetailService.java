@@ -14,7 +14,7 @@ public class MemberDetailService {
 
     private final MemberProcessor memberProcessor;
 
-    public MemberDetailDto.Info detail(final Long memberId, final String loginEmail) {
-        return memberProcessor.getMember(memberId, loginEmail);
+    public MemberDetailDto.Info detail(final Long memberId) {
+        return memberProcessor.getMember(memberId);
     }
 }

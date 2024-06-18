@@ -31,8 +31,7 @@ public class MemberProcessorImpl implements MemberProcessor {
     }
 
     @Override
-    public MemberDetailDto.Info getMember(final Long memberId, final String loginEmail) {
-        memberValidator.isSelf(memberId, loginEmail);
+    public MemberDetailDto.Info getMember(final Long memberId) {
         Member findMember = findById(memberId);
 
         return MemberDetailDto.Info.of(findMember);
