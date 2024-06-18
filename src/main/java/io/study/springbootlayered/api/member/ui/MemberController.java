@@ -1,7 +1,6 @@
 package io.study.springbootlayered.api.member.ui;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +18,7 @@ import io.study.springbootlayered.api.member.ui.dto.GetMemberDetailDto;
 import io.study.springbootlayered.api.member.ui.dto.PostMemberSigninDto;
 import io.study.springbootlayered.api.member.ui.dto.PostMemberSignupDto;
 import io.study.springbootlayered.api.member.ui.mapstruct.MemberDtoMapstructMapper;
+import io.study.springbootlayered.web.annotation.LoginInfo;
 import io.study.springbootlayered.web.base.BaseResource;
 import io.study.springbootlayered.web.base.response.CommonResponse;
 import jakarta.validation.Valid;
@@ -68,9 +68,9 @@ public class MemberController extends BaseResource {
      * @param memberId - 회원 식별 키
      */
     @GetMapping(value = "/members/{memberId}", headers = X_API_VERSION)
-    public ResponseEntity<CommonResponse<GetMemberDetailDto.Response>> detail(@PathVariable final Long memberId) {
-        String loginEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        MemberDetailDto.Info info = memberDetailService.detail(memberId, loginEmail);
+    public ResponseEntity<CommonResponse<GetMemberDetailDto.Response>> detail(@PathVariable final Long memberId,
+        @LoginInfo io.study.springbootlayered.web.base.principal.LoginMemberInfo loginMemberInfo) {
+        MemberDetailDto.Info info = memberDetailService.detail(memberId, loginMemberInfo.getEmail());
         GetMemberDetailDto.Response response = memberDtoMapstructManager.of(info);
         return ResponseEntity.ok(CommonResponse.of(response));
     }
@@ -80,7 +80,8 @@ public class MemberController extends BaseResource {
     2. 로그인 후 토큰까서 정보 잘 들어가있는지 확인하고 - ok
     3. @Value 어노테이션 제거 - ok
     4. 이메일이랑 비밀번호 어노테이션 만들어서 달기 - ok
-    5. 회원정보 조회 API 구현(로그인 테스트 용)
+    5. 회원정보 조회 API 구현(로그인 테스트 용) - ok
+    6. API 호출 시 입력받은 id가 본인 email 식별자인지 확인하는 어노테이션 구현, AOP로 하면 될 듯
      */
 
 }
