@@ -15,17 +15,17 @@ public class MemberValidator {
     private final MemberRepository memberRepository;
 
     public void signinValidate(final MemberSignupDto.Command request) {
-        nicknameDuplicateValidation(request.getNickname());
-        emailDuplicateValidation(request.getEmail());
+        validateDuplicateNickname(request.getNickname());
+        validationDuplicateEmail(request.getEmail());
     }
 
-    private void nicknameDuplicateValidation(final String nickname) {
+    private void validateDuplicateNickname(final String nickname) {
         if (memberRepository.existsByNickname(nickname)) {
             throw new ApiException(MemberErrorCode.CONFLICT_DUPLICATE_NICKNAME);
         }
     }
 
-    private void emailDuplicateValidation(final String email) {
+    private void validationDuplicateEmail(final String email) {
         if (memberRepository.existsByEmail(email)) {
             throw new ApiException(MemberErrorCode.CONFLICT_DUPLICATE_EMAIL);
         }
