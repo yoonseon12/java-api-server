@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import io.study.springbootlayered.api.member.domain.dto.MemberDetailDto;
 import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
 import io.study.springbootlayered.api.member.domain.entity.Member;
+import io.study.springbootlayered.api.member.domain.repository.MemberQueryRepository;
 import io.study.springbootlayered.api.member.domain.repository.MemberRepository;
 import io.study.springbootlayered.api.member.domain.validation.MemberValidator;
 import io.study.springbootlayered.web.exception.ApiException;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberProcessorImpl implements MemberProcessor {
 
+    private final MemberQueryRepository memberQueryRepository;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemberValidator memberValidator;
@@ -38,7 +40,7 @@ public class MemberProcessorImpl implements MemberProcessor {
     }
 
     private Member findById(final Long memberId) {
-        return memberRepository.findById(memberId)
+        return memberQueryRepository.findById(memberId)
             .orElseThrow(() -> new ApiException(MemberErrorCode.NOT_FOUND_MEMBER));
     }
 
