@@ -1,7 +1,7 @@
 spring:
 
   config:
-    import: optional:classpath:/jwt.yml
+    import: optional:classpath:/application-jwt.yml
 
   h2:
     console:
