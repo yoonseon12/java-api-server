@@ -23,6 +23,7 @@ import io.study.springbootlayered.api.member.ui.dto.PostMemberSignupDto;
 import io.study.springbootlayered.api.member.ui.mapstruct.MemberDtoMapstructMapper;
 import io.study.springbootlayered.web.annotation.OnlyOwnerAllowed;
 import io.study.springbootlayered.web.base.BaseResource;
+import io.study.springbootlayered.web.base.response.BaseResponse;
 import io.study.springbootlayered.web.base.response.CommonResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -86,10 +87,10 @@ public class MemberController extends BaseResource {
      */
     @PostMapping(value = "/members/reset-password", headers = X_API_VERSION)
     @OnlyOwnerAllowed
-    public ResponseEntity<CommonResponse<PostMemberPasswordResetDto.Response>> resetPassword(
+    public ResponseEntity<BaseResponse> resetPassword(
         @RequestBody @Valid final PostMemberPasswordResetDto.Request request) {
         MemberPasswordResetDto.Command command = memberDtoMapstructManager.of(request);
         memberResetService.resetPassword(command);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new BaseResponse());
     }
 }
