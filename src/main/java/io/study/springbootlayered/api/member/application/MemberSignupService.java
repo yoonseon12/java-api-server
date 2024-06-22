@@ -1,20 +1,23 @@
 package io.study.springbootlayered.api.member.application;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.study.springbootlayered.api.member.domain.MemberProcessor;
 import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
-import io.study.springbootlayered.api.member.domain.mail.MailService;
+import io.study.springbootlayered.api.member.domain.event.SignupEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberSignupService {
 
     private final MemberProcessor memberProcessor;
-    private final MailService mailService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public MemberSignupDto.Info signup(final MemberSignupDto.Command request) {
@@ -23,12 +26,8 @@ public class MemberSignupService {
 
         /** 회원가입 완료 후 이메일 전송 **/
         String registeredEmail = info.getEmail();
-        mailService.sendMail(toEmailArray(registeredEmail), "회원가입 완료 안내", "회원가입이 완료되었습니다.");
+        eventPublisher.publishEvent(SignupEvent.of(registeredEmail));
 
         return info;
-    }
-
-    private String[] toEmailArray(String... email) {
-        return email;
     }
 }
