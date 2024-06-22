@@ -32,7 +32,8 @@ public class SecurityConfig {
 
     private static final String[] PERMIT_ALL_POSTS = {
         "/api/members",
-        "/api/members/signin"
+        "/api/members/signin",
+        "/api/members/reset-password",
     };
 
     @Bean

@@ -9,12 +9,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.study.springbootlayered.api.member.application.MemberDetailService;
+import io.study.springbootlayered.api.member.application.MemberResetService;
 import io.study.springbootlayered.api.member.application.MemberSigninService;
 import io.study.springbootlayered.api.member.application.MemberSignupService;
 import io.study.springbootlayered.api.member.domain.dto.MemberDetailDto;
+import io.study.springbootlayered.api.member.domain.dto.MemberPasswordResetDto;
 import io.study.springbootlayered.api.member.domain.dto.MemberSigninDto;
 import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
 import io.study.springbootlayered.api.member.ui.dto.GetMemberDetailDto;
+import io.study.springbootlayered.api.member.ui.dto.PostMemberPasswordResetDto;
 import io.study.springbootlayered.api.member.ui.dto.PostMemberSigninDto;
 import io.study.springbootlayered.api.member.ui.dto.PostMemberSignupDto;
 import io.study.springbootlayered.api.member.ui.mapstruct.MemberDtoMapstructMapper;
@@ -33,6 +36,7 @@ public class MemberController extends BaseResource {
     private final MemberSignupService memberSignupService;
     private final MemberSigninService memberSigninService;
     private final MemberDetailService memberDetailService;
+    private final MemberResetService memberResetService;
 
     /**
      * 유저 회원가입
@@ -73,5 +77,19 @@ public class MemberController extends BaseResource {
         MemberDetailDto.Info info = memberDetailService.detail(memberId);
         GetMemberDetailDto.Response response = memberDtoMapstructManager.of(info);
         return ResponseEntity.ok(CommonResponse.of(response));
+    }
+
+    /**
+     * 비밀번호 초기화
+     *
+     * @param request - 회원 정보
+     */
+    @PostMapping(value = "/members/reset-password", headers = X_API_VERSION)
+    @OnlyOwnerAllowed
+    public ResponseEntity<CommonResponse<PostMemberPasswordResetDto.Response>> resetPassword(
+        @RequestBody @Valid final PostMemberPasswordResetDto.Request request) {
+        MemberPasswordResetDto.Command command = memberDtoMapstructManager.of(request);
+        memberResetService.resetPassword(command);
+        return ResponseEntity.noContent().build();
     }
 }

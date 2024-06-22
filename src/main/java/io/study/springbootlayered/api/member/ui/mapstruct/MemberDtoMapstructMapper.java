@@ -2,12 +2,15 @@ package io.study.springbootlayered.api.member.ui.mapstruct;
 
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import io.study.springbootlayered.api.member.domain.dto.MemberDetailDto;
+import io.study.springbootlayered.api.member.domain.dto.MemberPasswordResetDto;
 import io.study.springbootlayered.api.member.domain.dto.MemberSigninDto;
 import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
 import io.study.springbootlayered.api.member.ui.dto.GetMemberDetailDto;
+import io.study.springbootlayered.api.member.ui.dto.PostMemberPasswordResetDto;
 import io.study.springbootlayered.api.member.ui.dto.PostMemberSigninDto;
 import io.study.springbootlayered.api.member.ui.dto.PostMemberSignupDto;
 
@@ -27,4 +30,7 @@ public interface MemberDtoMapstructMapper {
     PostMemberSigninDto.Response of(MemberSigninDto.Info response);
 
     GetMemberDetailDto.Response of(MemberDetailDto.Info response);
+
+    @Mapping(target = "password", ignore = true)
+    MemberPasswordResetDto.Command of(PostMemberPasswordResetDto.Request request);
 }

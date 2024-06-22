@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import io.study.springbootlayered.api.member.domain.dto.MemberDetailDto;
+import io.study.springbootlayered.api.member.domain.dto.MemberPasswordResetDto;
 import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
 import io.study.springbootlayered.api.member.domain.entity.Member;
 import io.study.springbootlayered.api.member.domain.repository.MemberQueryRepository;
@@ -39,8 +40,19 @@ public class MemberProcessorImpl implements MemberProcessor {
         return MemberDetailDto.Info.of(findMember);
     }
 
+    @Override
+    public void resetPassword(final MemberPasswordResetDto.Command command) {
+        Member findMember = findByEmail(command.getEmail());
+        findMember.changePassword(encodePassword(command.getPassword()));
+    }
+
     private Member findById(final Long memberId) {
         return memberQueryRepository.findById(memberId)
+            .orElseThrow(() -> new ApiException(MemberErrorCode.NOT_FOUND_MEMBER));
+    }
+
+    private Member findByEmail(final String email) {
+        return memberQueryRepository.findByEmail(email)
             .orElseThrow(() -> new ApiException(MemberErrorCode.NOT_FOUND_MEMBER));
     }
 

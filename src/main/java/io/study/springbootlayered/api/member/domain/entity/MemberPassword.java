@@ -16,11 +16,8 @@ public class MemberPassword {
     protected MemberPassword() {
     }
 
-    public MemberPassword(String value) {
+    public MemberPassword(final String value) {
         this.value = value;
     }
 
-    public boolean match(String password) {
-        return this.value.equals(password);
-    }
 }

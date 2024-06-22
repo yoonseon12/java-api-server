@@ -24,7 +24,19 @@ public class MemberEventListener {
         mailService.sendMail(toEmail, "회원가입 완료 안내", "회원가입이 완료되었습니다.");
     }
 
-    private String[] toEmailArray(String... email) {
+    private String[] toEmailArray(final String... email) {
         return email;
     }
+
+    @Async
+    @TransactionalEventListener
+    public void resetPasswordEventListener(final ResetPasswordEvent event) {
+        log.info("MemberEventListener.resetPasswordEventListener !!");
+
+        String[] toEmail = toEmailArray(event.getEmail());
+        String password = event.getTempPassword();
+
+        mailService.sendMail(toEmail, "임시 비밀번호 발급 안내", "임시 비밀번호 : " + password);
+    }
+
 }
