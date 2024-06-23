@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.study.springbootlayered.api.member.domain.MemberProcessor;
 import io.study.springbootlayered.api.member.domain.dto.MemberPasswordResetDto;
 import io.study.springbootlayered.api.member.domain.event.ResetPasswordEvent;
+import io.study.springbootlayered.web.base.Events;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberResetService {
 
     private final MemberProcessor memberProcessor;
-    private final ApplicationEventPublisher eventPublisher;
 
     private static final String VALID_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final String SPECIAL_CHARACTERS = "!@#$%^&*()\\-_=+";
@@ -37,7 +36,7 @@ public class MemberResetService {
 
         memberProcessor.resetPassword(new MemberPasswordResetDto.Command(request.getEmail(), resetPassword));
 
-        eventPublisher.publishEvent(ResetPasswordEvent.of(request.getEmail(), resetPassword));
+        Events.raise(ResetPasswordEvent.of(request.getEmail(), resetPassword));
     }
 
     public String createResetPassword() {
