@@ -1,10 +1,14 @@
 package io.study.springbootlayered.web.config;
 
+import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+import io.study.springbootlayered.web.config.mdc.MdcTaskDecorator;
+import io.study.springbootlayered.web.exception.AsyncExceptionHandler;
 
 @Configuration
 @EnableAsync
@@ -29,8 +33,14 @@ public class AsyncConfig implements AsyncConfigurer {
         // true 설정시 어플리케이션 종료 요청시 queue에 남아 있는 모든 작업들이 완료될 때까지 기다린 후 종료
         executor.setWaitForTasksToCompleteOnShutdown(WAIT_TASK_COMPLETE);
 
+        executor.setTaskDecorator(new MdcTaskDecorator());
         executor.initialize();
 
         return executor;
+    }
+
+    @Override
+    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+        return new AsyncExceptionHandler();
     }
 }

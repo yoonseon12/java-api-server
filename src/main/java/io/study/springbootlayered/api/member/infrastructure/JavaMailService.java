@@ -7,7 +7,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import io.study.springbootlayered.api.member.domain.mail.MailService;
-import io.study.springbootlayered.web.exception.ApiException;
+import io.study.springbootlayered.web.exception.AsyncException;
 import io.study.springbootlayered.web.exception.error.MailErrorCode;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -31,7 +31,7 @@ public class JavaMailService implements MailService {
             messageHelper.setFrom(new InternetAddress("noreply.yoonseon3@gmail.com", "이윤선", "UTF-8"));
             messageHelper.setText(content, true);
         } catch (MessagingException | UnsupportedEncodingException e) {
-            throw new ApiException(MailErrorCode.INTERNAL_MAIL_ERROR);
+            throw new AsyncException(MailErrorCode.MAIL_SEND_ERROR);
         }
 
         mailSender.send(message);

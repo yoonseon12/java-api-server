@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum MailErrorCode implements ErrorCode {
 
-    INTERNAL_MAIL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "잘못된 서명입니다.");
+    MAIL_SEND_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "메일 전송 중 에러가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String description;
