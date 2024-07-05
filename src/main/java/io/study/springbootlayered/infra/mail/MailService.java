@@ -1,4 +1,4 @@
-package io.study.springbootlayered.api.member.domain.mail;
+package io.study.springbootlayered.infra.mail;
 
 public interface MailService {
 

@@ -1,4 +1,4 @@
-package io.study.springbootlayered.api.member.infrastructure;
+package io.study.springbootlayered.infra.mail.infrastructure;
 
 import java.io.UnsupportedEncodingException;
 
@@ -6,7 +6,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import io.study.springbootlayered.api.member.domain.mail.MailService;
+import io.study.springbootlayered.infra.mail.MailService;
 import io.study.springbootlayered.web.exception.AsyncException;
 import io.study.springbootlayered.web.exception.error.MailErrorCode;
 import jakarta.mail.MessagingException;
