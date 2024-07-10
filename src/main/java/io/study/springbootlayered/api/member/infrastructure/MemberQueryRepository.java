@@ -1,4 +1,4 @@
-package io.study.springbootlayered.api.member.domain.repository;
+package io.study.springbootlayered.api.member.infrastructure;
 
 import java.util.Optional;
 
