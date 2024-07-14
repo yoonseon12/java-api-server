@@ -13,8 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
 import io.study.springbootlayered.api.member.domain.entity.Member;
+import io.study.springbootlayered.api.member.domain.repository.MemberRepository;
 import io.study.springbootlayered.api.member.domain.validation.MemberValidator;
-import io.study.springbootlayered.api.member.infrastructure.MemberRepository;
 
 @ExtendWith(MockitoExtension.class)
 class MemberProcessorImplTest {

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.study.springbootlayered.api.member.domain.entity.Member;
-import io.study.springbootlayered.api.member.infrastructure.MemberQueryRepository;
+import io.study.springbootlayered.api.member.infrastructure.MemberQueryJpaRepository;
 import io.study.springbootlayered.web.exception.ApiException;
 import io.study.springbootlayered.web.exception.error.LoginErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class MemberDetailsProcessor implements UserDetailsService {
 
-    private final MemberQueryRepository memberQueryRepository;
+    private final MemberQueryJpaRepository memberQueryRepository;
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {

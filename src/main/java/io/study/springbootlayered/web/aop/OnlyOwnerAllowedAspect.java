@@ -6,7 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import io.study.springbootlayered.api.member.domain.entity.Member;
-import io.study.springbootlayered.api.member.infrastructure.MemberQueryRepository;
+import io.study.springbootlayered.api.member.domain.repository.MemberQueryRepository;
 import io.study.springbootlayered.web.exception.ApiException;
 import io.study.springbootlayered.web.exception.error.LoginErrorCode;
 import lombok.RequiredArgsConstructor;
