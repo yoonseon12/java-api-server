@@ -32,9 +32,8 @@ public class JwtFilter extends OncePerRequestFilter {
         FilterChain filterChain) throws ServletException, IOException {
 
         String jwt = resolveToken(request);
-        validateToken(request, jwt);
 
-        if (StringUtils.hasText(jwt) && jwtProvider.validateAccessToken(jwt)) {
+        if (StringUtils.hasText(jwt) && validateToken(request, jwt)) {
             Authentication authentication = jwtProvider.getAuthentication(jwt);
             log.info("인증정보 저장 {}", authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -43,9 +42,9 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void validateToken(final HttpServletRequest request, final String token) {
+    private boolean validateToken(final HttpServletRequest request, final String token) {
         try {
-            jwtProvider.validateAccessToken(token);
+            return jwtProvider.validateAccessToken(token);
         } catch (SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
             request.setAttribute(ATTRIBUTE, LoginErrorCode.INVALID_JWT_SIGNATURE);
@@ -69,6 +68,8 @@ public class JwtFilter extends OncePerRequestFilter {
             log.error("================================================");
             request.setAttribute(ATTRIBUTE, LoginErrorCode.JWT_UNKNOWN_ERROR);
         }
+
+        return false;
     }
 
     private String resolveToken(final HttpServletRequest request) {
