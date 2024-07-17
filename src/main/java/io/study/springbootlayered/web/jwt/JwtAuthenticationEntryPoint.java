@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.study.springbootlayered.web.base.response.ErrorResponse;
-import io.study.springbootlayered.web.exception.error.LoginErrorCode;
+import io.study.springbootlayered.web.exception.error.TokenErrorCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,31 +28,31 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
         AuthenticationException authException) throws IOException, ServletException {
 
-        LoginErrorCode attribute = (LoginErrorCode)request.getAttribute(ATTRIBUTE);
+        TokenErrorCode attribute = (TokenErrorCode)request.getAttribute(ATTRIBUTE);
 
         switch (attribute) {
             case INVALID_JWT_SIGNATURE:
-                responseBuilder(response, LoginErrorCode.INVALID_JWT_SIGNATURE);
+                responseBuilder(response, TokenErrorCode.INVALID_JWT_SIGNATURE);
                 return;
             case EXPIRED_JWT_TOKEN:
-                responseBuilder(response, LoginErrorCode.EXPIRED_JWT_TOKEN);
+                responseBuilder(response, TokenErrorCode.EXPIRED_JWT_TOKEN);
                 return;
             case UNSUPPORTED_JWT_TOKEN:
-                responseBuilder(response, LoginErrorCode.UNSUPPORTED_JWT_TOKEN);
+                responseBuilder(response, TokenErrorCode.UNSUPPORTED_JWT_TOKEN);
                 return;
             case INVALID_JWT_TOKEN:
-                responseBuilder(response, LoginErrorCode.INVALID_JWT_TOKEN);
+                responseBuilder(response, TokenErrorCode.INVALID_JWT_TOKEN);
                 return;
             case JWT_UNKNOWN_ERROR:
-                responseBuilder(response, LoginErrorCode.JWT_UNKNOWN_ERROR);
+                responseBuilder(response, TokenErrorCode.JWT_UNKNOWN_ERROR);
                 return;
             default:
-                responseBuilder(response, LoginErrorCode.JWT_UNKNOWN_ERROR);
+                responseBuilder(response, TokenErrorCode.JWT_UNKNOWN_ERROR);
                 return;
         }
     }
 
-    private void responseBuilder(HttpServletResponse response, LoginErrorCode errorCode) throws IOException {
+    private void responseBuilder(HttpServletResponse response, TokenErrorCode errorCode) throws IOException {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

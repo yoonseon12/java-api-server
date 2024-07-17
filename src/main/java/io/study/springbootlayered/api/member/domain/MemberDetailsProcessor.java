@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import io.study.springbootlayered.api.member.domain.entity.Member;
 import io.study.springbootlayered.api.member.infrastructure.MemberQueryJpaRepository;
 import io.study.springbootlayered.web.exception.ApiException;
-import io.study.springbootlayered.web.exception.error.LoginErrorCode;
+import io.study.springbootlayered.web.exception.error.AuthErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -22,7 +22,7 @@ public class MemberDetailsProcessor implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         Member member = memberQueryRepository.findByEmail(username)
-            .orElseThrow(() -> new ApiException(LoginErrorCode.INVALID_ACCOUNT));
+            .orElseThrow(() -> new ApiException(AuthErrorCode.INVALID_ACCOUNT));
 
         return new MemberDetails(member);
     }

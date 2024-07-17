@@ -12,7 +12,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SecurityException;
-import io.study.springbootlayered.web.exception.error.LoginErrorCode;
+import io.study.springbootlayered.web.exception.error.TokenErrorCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,16 +47,16 @@ public class JwtFilter extends OncePerRequestFilter {
             return jwtProvider.validateAccessToken(token);
         } catch (SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
-            request.setAttribute(ATTRIBUTE, LoginErrorCode.INVALID_JWT_SIGNATURE);
+            request.setAttribute(ATTRIBUTE, TokenErrorCode.INVALID_JWT_SIGNATURE);
         } catch (ExpiredJwtException e) {
-            request.setAttribute(ATTRIBUTE, LoginErrorCode.EXPIRED_JWT_TOKEN);
+            request.setAttribute(ATTRIBUTE, TokenErrorCode.EXPIRED_JWT_TOKEN);
             log.info("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
-            request.setAttribute(ATTRIBUTE, LoginErrorCode.UNSUPPORTED_JWT_TOKEN);
+            request.setAttribute(ATTRIBUTE, TokenErrorCode.UNSUPPORTED_JWT_TOKEN);
         } catch (IllegalArgumentException e) {
             log.error("JWT 토큰이 잘못되었습니다.");
-            request.setAttribute(ATTRIBUTE, LoginErrorCode.INVALID_JWT_TOKEN);
+            request.setAttribute(ATTRIBUTE, TokenErrorCode.INVALID_JWT_TOKEN);
         } catch (Exception e) {
             log.error("================================================");
             log.error("JwtFilter - doFilterInternal() 오류발생");
@@ -66,7 +66,7 @@ public class JwtFilter extends OncePerRequestFilter {
             e.printStackTrace();
             log.error("}");
             log.error("================================================");
-            request.setAttribute(ATTRIBUTE, LoginErrorCode.JWT_UNKNOWN_ERROR);
+            request.setAttribute(ATTRIBUTE, TokenErrorCode.JWT_UNKNOWN_ERROR);
         }
 
         return false;

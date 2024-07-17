@@ -86,7 +86,6 @@ public class MemberController extends BaseResource {
      * @param request - 회원 정보
      */
     @PostMapping(value = "/members/reset-password", headers = X_API_VERSION)
-    @OnlyOwnerAllowed
     public ResponseEntity<BaseResponse> resetPassword(
         @RequestBody @Valid final PostMemberPasswordResetDto.Request request) {
         MemberPasswordResetDto.Command command = memberDtoMapstructManager.of(request);

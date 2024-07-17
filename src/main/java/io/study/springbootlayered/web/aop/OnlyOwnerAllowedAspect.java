@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import io.study.springbootlayered.api.member.domain.entity.Member;
 import io.study.springbootlayered.api.member.domain.repository.MemberQueryRepository;
 import io.study.springbootlayered.web.exception.ApiException;
-import io.study.springbootlayered.web.exception.error.LoginErrorCode;
+import io.study.springbootlayered.web.exception.error.AuthErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Aspect
@@ -24,14 +24,14 @@ public class OnlyOwnerAllowedAspect {
         String loginEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Member findMember = memberQueryRepository.findById(memberId)
-            .orElseThrow(() -> new ApiException(LoginErrorCode.FORBIDDEN));
+            .orElseThrow(() -> new ApiException(AuthErrorCode.FORBIDDEN_REQUEST));
 
         validateSelfEmail(findMember.getEmail(), loginEmail);
     }
 
-    private void validateSelfEmail(final String findMemberEmail, final String loginEmail) {
-        if (!findMemberEmail.equals(loginEmail)) {
-            throw new ApiException(LoginErrorCode.FORBIDDEN);
+    private void validateSelfEmail(final String targetEmail, final String loginEmail) {
+        if (!targetEmail.equals(loginEmail)) {
+            throw new ApiException(AuthErrorCode.FORBIDDEN_REQUEST);
         }
     }
 }

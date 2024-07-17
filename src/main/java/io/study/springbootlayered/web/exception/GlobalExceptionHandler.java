@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.study.springbootlayered.web.base.response.ErrorResponse;
-import io.study.springbootlayered.web.exception.error.LoginErrorCode;
+import io.study.springbootlayered.web.exception.error.AuthErrorCode;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -37,9 +37,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(final AuthenticationException e) {
         log.warn(e.getMessage(), e);
-        LoginErrorCode errorCode = LoginErrorCode.INVALID_ACCOUNT;
+        AuthErrorCode errorCode = AuthErrorCode.INVALID_ACCOUNT;
         if (e instanceof BadCredentialsException) {
-            errorCode = LoginErrorCode.INVALID_PASSWORD;
+            errorCode = AuthErrorCode.INVALID_PASSWORD;
         }
 
         return ResponseEntity.status(errorCode.getHttpStatus().value())
