@@ -1,0 +1,9 @@
+POST localhost:8080/api/members
+x-api-version: v1
+Content-Type: application/json
+
+{
+  "nickname": "Kevin3",
+  "email": "yoonseon3@gmail.com",
+  "password": "aa1234@@@@"
+}
