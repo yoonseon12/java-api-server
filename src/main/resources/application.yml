@@ -13,7 +13,7 @@ spring:
   datasource:
     url: jdbc:h2:mem:java-api-server
     driver-class-name: org.h2.Driver
-    username: sa
+    username: ENC(jaYWf2ZIwK9eB24Mmu0dDA==)
     password:
 
   jpa:
@@ -24,6 +24,10 @@ spring:
       hibernate:
         #        show-sql: true
         format_sql: true
+
+jasypt:
+  encryptor:
+    password: ${jasypt-password}
 
 logging.level:
   org.hibernate.SQL: debug

@@ -1,7 +1,4 @@
 jwt:
-  secret: c3ByaW5nLWJvb3QtbGF5ZXJlZC1hcHBsaWNhdGlvbi1zYW1wbGUtMjAyNDA2MTQyMDMwLWp3dC10b2tlbi1oczUxMg==
+  secret: ENC(Y3jQoHPGoxk1cDEUrVuCXArdG5KS2Ntab8+BjBIA6qquNmhOiIdPiy+TY7cmC1Q1BdwaXtr4qNYkDI34fOaRKYInr4cCRQt4SFCMWxUHofHefvqAAmMKFM0LGKF5DCKXgrGS10SY340=)
   access-token-expire-time: 1_800     # 30분
   refresh-token-expire-time: 604_800  # 7주
-
-
-
