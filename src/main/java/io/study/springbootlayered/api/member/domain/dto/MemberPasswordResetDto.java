@@ -1,7 +1,8 @@
 package io.study.springbootlayered.api.member.domain.dto;
 
+import io.study.springbootlayered.web.annotation.ValidEmail;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +11,11 @@ import lombok.RequiredArgsConstructor;
 public class MemberPasswordResetDto {
 
     @Getter
-    @Builder
     @RequiredArgsConstructor
     public static class Command {
+        @ValidEmail
         private final String email;
+        @NotBlank
         private final String password;
     }
 }

@@ -14,13 +14,11 @@ import io.study.springbootlayered.api.member.domain.dto.MemberPasswordResetDto;
 import io.study.springbootlayered.api.member.domain.event.ResetPasswordEvent;
 import io.study.springbootlayered.web.base.Events;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberResetService {
+public class MemberResetUseCase {
 
     private final MemberProcessor memberProcessor;
 
@@ -29,6 +27,7 @@ public class MemberResetService {
     private static final int MAX_SPECIAL_CHARACTER = 3;
     private static final int MIN_LENGTH = 8;
     private static final int MAX_LENGTH = 16;
+    private final Random random = new SecureRandom();
 
     @Transactional
     public void resetPassword(final MemberPasswordResetDto.Command request) {
@@ -40,7 +39,6 @@ public class MemberResetService {
     }
 
     public String createResetPassword() {
-        Random random = new SecureRandom();
         final int passwordLength = MIN_LENGTH + random.nextInt(MAX_LENGTH - MIN_LENGTH + 1);
         StringBuilder password = new StringBuilder(passwordLength);
 
@@ -63,7 +61,6 @@ public class MemberResetService {
 
     private void addValidCharacters(final int specialCharacterLength, final int passwordLength,
         final StringBuilder password) {
-        Random random = new SecureRandom();
         for (int i = specialCharacterLength; i < passwordLength; i++) {
             int index = random.nextInt(VALID_CHARACTERS.length());
             password.append(VALID_CHARACTERS.charAt(index));
@@ -71,7 +68,6 @@ public class MemberResetService {
     }
 
     private int addSpecialCharacters(final StringBuilder password) {
-        Random random = new SecureRandom();
         final int specialCharacterLength = random.nextInt(MAX_SPECIAL_CHARACTER) + 1;
 
         for (int i = 0; i < specialCharacterLength; i++) {

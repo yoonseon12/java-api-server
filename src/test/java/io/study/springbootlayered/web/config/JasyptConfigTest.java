@@ -4,6 +4,8 @@ import org.assertj.core.api.Assertions;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.junit.jupiter.api.Test;
 
+import io.study.springbootlayered.web.util.StringUtils;
+
 class JasyptConfigTest {
 
     @Test
@@ -15,10 +17,10 @@ class JasyptConfigTest {
 
         String targetStr = " ";
         String encrypted = jasypt.encrypt(targetStr);
-        System.out.println("encrypted = " + encrypted);
+        System.out.println(StringUtils.format("encrypted = {}", encrypted));
 
         String decrypted = jasypt.decrypt(encrypted);
-        System.out.println("decrypted = " + decrypted);
+        System.out.println(StringUtils.format("decrypted = {}", decrypted));
 
         Assertions.assertThat(decrypted).isEqualTo(targetStr);
     }

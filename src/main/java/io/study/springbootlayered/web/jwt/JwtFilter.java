@@ -46,26 +46,28 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             return jwtProvider.validateAccessToken(token);
         } catch (SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
+            log.debug("잘못된 JWT 서명입니다.");
             request.setAttribute(ATTRIBUTE, TokenErrorCode.INVALID_JWT_SIGNATURE);
         } catch (ExpiredJwtException e) {
             request.setAttribute(ATTRIBUTE, TokenErrorCode.EXPIRED_JWT_TOKEN);
-            log.info("만료된 JWT 토큰입니다.");
+            log.debug("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.");
+            log.debug("지원되지 않는 JWT 토큰입니다.");
             request.setAttribute(ATTRIBUTE, TokenErrorCode.UNSUPPORTED_JWT_TOKEN);
         } catch (IllegalArgumentException e) {
-            log.error("JWT 토큰이 잘못되었습니다.");
+            log.debug("JWT 토큰이 잘못되었습니다.");
             request.setAttribute(ATTRIBUTE, TokenErrorCode.INVALID_JWT_TOKEN);
         } catch (Exception e) {
-            log.error("================================================");
-            log.error("JwtFilter - doFilterInternal() 오류발생");
-            log.error("token : {}", token);
-            log.error("Exception Message : {}", e.getMessage());
-            log.error("Exception StackTrace : {");
-            e.printStackTrace();
-            log.error("}");
-            log.error("================================================");
+            log.debug(
+                """
+                    =======================================
+                    JwtFilter - doFilterInternal() 오류발생
+                    token: {}
+                    Exception Message: {}
+                    Exception StackTrace: {}
+                    =======================================
+                    """.trim(), token, e.getMessage(), e.getStackTrace()
+            );
             request.setAttribute(ATTRIBUTE, TokenErrorCode.JWT_UNKNOWN_ERROR);
         }
 

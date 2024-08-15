@@ -1,6 +1,7 @@
 package io.study.springbootlayered.api.member.domain.validation;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
 import io.study.springbootlayered.api.member.domain.repository.MemberQueryRepository;
@@ -10,13 +11,14 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberValidator {
 
     private final MemberQueryRepository memberQueryRepository;
 
     public void signinValidate(final MemberSignupDto.Command request) {
         validateDuplicateNickname(request.getNickname());
-        validationDuplicateEmail(request.getEmail());
+        validateDuplicateEmail(request.getEmail());
     }
 
     private void validateDuplicateNickname(final String nickname) {
@@ -25,7 +27,7 @@ public class MemberValidator {
         }
     }
 
-    private void validationDuplicateEmail(final String email) {
+    private void validateDuplicateEmail(final String email) {
         if (memberQueryRepository.existsByEmail(email)) {
             throw new ApiException(MemberErrorCode.CONFLICT_DUPLICATE_EMAIL);
         }

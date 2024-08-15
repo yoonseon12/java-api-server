@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberDetailService {
+public class MemberDetailUseCase {
 
     private final MemberProcessor memberProcessor;
 

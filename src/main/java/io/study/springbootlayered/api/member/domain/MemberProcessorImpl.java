@@ -2,6 +2,7 @@ package io.study.springbootlayered.api.member.domain;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.study.springbootlayered.api.member.domain.dto.MemberDetailDto;
 import io.study.springbootlayered.api.member.domain.dto.MemberPasswordResetDto;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberProcessorImpl implements MemberProcessor {
 
     private final MemberQueryRepository memberQueryRepository;
@@ -24,6 +26,7 @@ public class MemberProcessorImpl implements MemberProcessor {
     private final MemberValidator memberValidator;
 
     @Override
+    @Transactional
     public MemberSignupDto.Info register(final MemberSignupDto.Command request) {
         memberValidator.signinValidate(request);
         Member initBasicMember = Member.createBasicMember(request.getEmail(), request.getNickname(),
@@ -41,6 +44,7 @@ public class MemberProcessorImpl implements MemberProcessor {
     }
 
     @Override
+    @Transactional
     public void resetPassword(final MemberPasswordResetDto.Command command) {
         Member findMember = findByEmail(command.getEmail());
         findMember.changePassword(encodePassword(command.getPassword()));

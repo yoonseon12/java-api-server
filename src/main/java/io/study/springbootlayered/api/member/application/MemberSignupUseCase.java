@@ -8,22 +8,20 @@ import io.study.springbootlayered.api.member.domain.dto.MemberSignupDto;
 import io.study.springbootlayered.api.member.domain.event.SignupEvent;
 import io.study.springbootlayered.web.base.Events;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberSignupService {
+public class MemberSignupUseCase {
 
     private final MemberProcessor memberProcessor;
 
     @Transactional
     public MemberSignupDto.Info signup(final MemberSignupDto.Command request) {
-        /** 회원 가입 **/
+        // 1. 회원 가입
         MemberSignupDto.Info info = memberProcessor.register(request);
 
-        /** 회원가입 완료 후 이메일 전송 **/
+        // 2. 회원가입 완료 후 이메일 전송
         String registeredEmail = info.getEmail();
         Events.raise(SignupEvent.of(registeredEmail));
 

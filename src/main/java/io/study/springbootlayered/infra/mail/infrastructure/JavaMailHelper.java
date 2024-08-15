@@ -6,7 +6,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import io.study.springbootlayered.infra.mail.MailService;
+import io.study.springbootlayered.infra.mail.MailHelper;
 import io.study.springbootlayered.web.exception.AsyncException;
 import io.study.springbootlayered.web.exception.error.MailErrorCode;
 import jakarta.mail.MessagingException;
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class JavaMailService implements MailService {
+public class JavaMailHelper implements MailHelper {
 
     private final JavaMailSender mailSender;
 

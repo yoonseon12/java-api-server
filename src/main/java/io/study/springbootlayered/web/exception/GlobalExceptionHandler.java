@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ErrorResponse> handleApiException(final ApiException e) {
-        log.warn(e.getMessage(), e);
+        log.error(e.getMessage(), e);
 
         return ResponseEntity.status(e.getErrorCode().getHttpStatus())
             .body(ErrorResponse.of(e.getErrorCode()));
@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handlerMethodArgumentNotValidException(
         final MethodArgumentNotValidException e) {
-        log.warn(e.getMessage(), e);
+        log.error(e.getMessage(), e);
 
         return ResponseEntity.status(e.getStatusCode())
             .body(
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(final AuthenticationException e) {
-        log.warn(e.getMessage(), e);
+        log.error(e.getMessage(), e);
         AuthErrorCode errorCode = AuthErrorCode.INVALID_ACCOUNT;
         if (e instanceof BadCredentialsException) {
             errorCode = AuthErrorCode.INVALID_PASSWORD;
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handlerException(final Exception e) {
-        log.warn(e.getMessage(), e);
+        log.error(e.getMessage(), e);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
             .body(ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
